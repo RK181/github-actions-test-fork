@@ -17,10 +17,10 @@ jobs:
         
       - name: Check if PR exists
         run: |
-          PR_EXISTS=$(gh pr list -B upstream/master -H origin/master --json number | jq '. | length')
+          PR_EXISTS=$(gh pr list -B upstream/master -H master --json number | jq '. | length')
           echo "PR_EXISTS=$PR_EXISTS" >> $GITHUB_ENV
 
       - name: Create Pull Request (if none exists)
         if: env.PR_EXISTS == '0'
-        run: gh pr create -B upstream/master -H origin/master --title 'Merge fork master into upstream master' --body 'Created by Github action'
+        run: gh pr create -B upstream/master -H master --title 'Merge fork master into upstream master' --body 'Created by Github action'
 
