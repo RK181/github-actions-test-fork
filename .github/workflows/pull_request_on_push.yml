@@ -6,6 +6,8 @@ on:
 
 jobs:
   crete_pull_request:
+    permissions: 
+      pull-requests: write
     runs-on: ubuntu-latest
     steps:
       - name: create pull request
