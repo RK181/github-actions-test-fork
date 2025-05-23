@@ -13,7 +13,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Check if PR exists
-        id: check_pr
         run: |
           PR_EXISTS=$(gh pr list --base master --head devel --json number | jq '. | length > 0')
           echo "PR_EXISTS=$PR_EXISTS" >> $GITHUB_ENV
