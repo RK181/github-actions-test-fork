@@ -27,5 +27,5 @@ jobs:
         if: env.PR_EXISTS == 'false'
         run: gh pr create -B master -H devel --title 'Merge devel into master' --body 'Created by Github action'
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
 
