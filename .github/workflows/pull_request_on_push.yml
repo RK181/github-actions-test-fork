@@ -1,0 +1,14 @@
+name: Pull Request into Master on Push into Devel
+
+on:
+  push:
+    branches: [ "devel" ]
+
+jobs:
+  crete_pull_request:
+    runs-on: ubuntu-latest
+    steps:
+      - name: create pull request
+        run: gh pr create -B devel -H master --title 'Merge devel into master' --body 'Created by Github action'
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
