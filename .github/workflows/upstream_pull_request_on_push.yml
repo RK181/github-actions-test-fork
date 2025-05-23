@@ -1,0 +1,26 @@
+name: Pull Request into Upstream Repo on Push into fork Master
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  crete_pull_request:
+    permissions: 
+      pull-requests: write
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Check if PR exists
+        run: |
+          PR_EXISTS=$(gh pr list -B upstream/master -H origin/master --json number | jq '. | length')
+          echo "PR_EXISTS=$PR_EXISTS" >> $GITHUB_ENV
+
+      - name: Create Pull Request (if none exists)
+        if: env.PR_EXISTS == '0'
+        run: gh pr create -B upstream/master -H origin/master --title 'Merge fork master into upstream master' --body 'Created by Github action'
+
