@@ -14,7 +14,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Check if PR exists
         run: |
-          PR_EXISTS=$(gh pr list --base master --head devel --json number | jq '. | length > 0')
+          PR_EXISTS=$(gh pr list -B master -H devel --json number | jq '. | length > 0')
           echo "PR_EXISTS=$PR_EXISTS" >> $GITHUB_ENV
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
