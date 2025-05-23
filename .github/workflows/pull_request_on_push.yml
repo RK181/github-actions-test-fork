@@ -15,16 +15,16 @@ jobs:
       - name: Check if PR exists
         id: check_pr
         run: |
-          if gh pr list --base master --head devel --json number | jq '. | length > 0'; then
-            echo "PR_EXISTS=1" >> $GITHUB_ENV
+          if (gh pr list --base master --head devel --json number | jq '. | length > 0'); then
+            echo "PR_EXISTS=true" >> $GITHUB_ENV
           else
-            echo "PR_EXISTS=0" >> $GITHUB_ENV
+            echo "PR_EXISTS=false" >> $GITHUB_ENV
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Debug PR_EXISTS Value
-        run: echo "${{ gh pr list --base master --head devel --json number }}"
+        run: echo "${{ env.PR_EXISTS }}"
 
       - name: Create Pull Request (if none exists)
         if: ${{ env.PR_EXISTS == '0' }}
