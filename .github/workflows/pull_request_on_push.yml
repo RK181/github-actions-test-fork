@@ -12,7 +12,20 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: create pull request
+      - name: Check if PR exists
+        id: check_pr
+        run: |
+          if gh pr list --base master --head devel --json number | jq '. | length > 0'; then
+            echo "PR_EXISTS=true" >> $GITHUB_ENV
+          else
+            echo "PR_EXISTS=false" >> $GITHUB_ENV
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Pull Request (if none exists)
+        if: env.PR_EXISTS == 'false'
         run: gh pr create -B master -H devel --title 'Merge devel into master' --body 'Created by Github action'
         env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
