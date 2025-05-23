@@ -13,6 +13,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: create pull request
-        run: gh pr create -B devel -H master --title 'Merge devel into master' --body 'Created by Github action'
+        run: gh pr create -B devel -H origin/master --title 'Merge devel into master' --body 'Created by Github action'
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
