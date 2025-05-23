@@ -10,8 +10,19 @@ jobs:
       pull-requests: write
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Check if PR exists
+        id: check_pr
+        run: echo "PR_EXISTS=${{gh pr list --base master --head devel --json number | jq '. | length > 0'}}" >> $GITHUB_ENV
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Debug PR_EXISTS Value
+        run: echo "${{ env.PR_EXISTS }}"
+
       - name: Create Pull Request (if none exists)
-        if: gh pr list --base master --head devel --json number | jq '. | length > 0'
+        if: ${{ env.PR_EXISTS == '0' }}
         run: gh pr create -B master -H devel --title 'Merge devel into master' --body 'Created by Github action'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
