@@ -24,7 +24,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Debug PR_EXISTS Value
-        run: echo "PR_EXISTS=${{ env.PR_EXISTS }}"
+        run: echo "${{ gh pr list --base master --head devel --json number }}"
 
       - name: Create Pull Request (if none exists)
         if: ${{ env.PR_EXISTS == '0' }}
