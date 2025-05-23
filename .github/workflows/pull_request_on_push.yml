@@ -14,15 +14,14 @@ jobs:
         uses: actions/checkout@v4
       - name: Check if PR exists
         id: check_pr
-        run: echo "PR_EXISTS=${{gh pr list --base master --head devel --json number | jq '. | length > 0'}}" >> $GITHUB_ENV
+        run: |
+          PR_EXISTS=$(gh pr list --base master --head devel --json number | jq '. | length > 0')
+          echo "PR_EXISTS=$PR_EXISTS" >> $GITHUB_ENV
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Debug PR_EXISTS Value
-        run: echo "${{ env.PR_EXISTS }}"
-
       - name: Create Pull Request (if none exists)
-        if: ${{ env.PR_EXISTS == '0' }}
+        if: env.PR_EXISTS == 'false'
         run: gh pr create -B master -H devel --title 'Merge devel into master' --body 'Created by Github action'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
